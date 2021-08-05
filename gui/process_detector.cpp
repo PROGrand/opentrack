@@ -63,7 +63,7 @@ void proc_detector_settings::set_is_enabled(bool enabled)
 QHash<QString, QString> proc_detector_settings::split_process_names()
 {
     QString str = get_game_list();
-    QStringList pairs = str.split(RECORD_SEPARATOR, QString::SkipEmptyParts);
+    QStringList pairs = str.split(RECORD_SEPARATOR, Qt::SkipEmptyParts);
     QHash<QString, QString> ret;
     ret.reserve(pairs.size() * 2);
     for (auto const& pair : pairs)

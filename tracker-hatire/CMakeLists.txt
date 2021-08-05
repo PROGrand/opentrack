@@ -1,5 +1,5 @@
-if(Qt5SerialPort_FOUND)
+if(Qt6SerialPort_FOUND)
     otr_module(tracker-hatire)
-    target_link_libraries(${self} ${Qt5SerialPort_LIBRARIES})
-    target_include_directories(${self} SYSTEM PUBLIC ${Qt5SerialPort_INCLUDE_DIRS})
+    target_link_libraries(${self} ${Qt6SerialPort_LIBRARIES})
+    target_include_directories(${self} SYSTEM PUBLIC ${Qt6SerialPort_INCLUDE_DIRS})
 endif()

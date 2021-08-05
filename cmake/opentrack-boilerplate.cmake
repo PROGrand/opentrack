@@ -109,7 +109,7 @@ endfunction()
 
 function(otr_install_pdb_current_project target)
     if(MSVC)
-        install(FILES "$<TARGET_PDB_FILE:${target}>" DESTINATION "${opentrack-debug}" PERMISSIONS ${opentrack-perms-file})
+    #    install(FILES "$<TARGET_PDB_FILE:${target}>" DESTINATION "${opentrack-debug}" PERMISSIONS ${opentrack-perms-file})
     endif()
 endfunction()
 
@@ -137,6 +137,7 @@ function(otr_module n_)
     list(APPEND ${n}-all ${arg_SOURCES})
 
     if(NOT arg_NO-QT)
+        set(arg_NO-I18N TRUE)
         otr_qt(${n})
     else()
         set(arg_NO-COMPAT TRUE)

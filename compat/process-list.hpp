@@ -33,7 +33,7 @@ static QStringList get_all_executable_names()
     }
 
     do {
-        ret.append(e.szExeFile);
+        ret.append(QString::fromWCharArray(e.szExeFile));
     } while (Process32Next(h, &e) == TRUE);
 
     CloseHandle(h);

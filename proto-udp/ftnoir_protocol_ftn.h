@@ -19,7 +19,7 @@ using namespace options;
 struct settings : opts {
     value<int> ip1, ip2, ip3, ip4, port;
     settings() :
-        opts("udp-proto"),
+        opts("witmotion-proto"),
         ip1(b, "ip1", 192),
         ip2(b, "ip2", 168),
         ip3(b, "ip3", 0),
@@ -28,12 +28,12 @@ struct settings : opts {
     {}
 };
 
-class udp : public QObject, public IProtocol
+class witmotion : public QObject, public IProtocol
 {
     Q_OBJECT
 
 public:
-    udp();
+    witmotion();
     module_status initialize() override;
     void pose(const double *headpose, const double*) override;
     QString game_name() override { return tr("UDP over network"); }

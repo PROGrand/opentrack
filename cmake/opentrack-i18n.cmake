@@ -9,7 +9,7 @@ add_custom_target(i18n ALL DEPENDS i18n-lrelease)
 function(otr_i18n_for_target_directory n)
     set(k "opentrack-${n}")
 
-    get_property(lupdate-binary TARGET "${Qt5_LUPDATE_EXECUTABLE}" PROPERTY IMPORTED_LOCATION)
+    get_property(lupdate-binary TARGET "${Qt6_LUPDATE_EXECUTABLE}" PROPERTY IMPORTED_LOCATION)
 
     #make_directory("${CMAKE_CURRENT_BINARY_DIR}/lang")
 
@@ -63,7 +63,7 @@ function(otr_merge_translations)
 
     foreach(i ${opentrack_all-translations})
         get_property(ts-files GLOBAL PROPERTY "opentrack-ts-files-${i}")
-        get_property(lrelease-binary TARGET "${Qt5_LRELEASE_EXECUTABLE}" PROPERTY IMPORTED_LOCATION)
+        get_property(lrelease-binary TARGET "${Qt6_LRELEASE_EXECUTABLE}" PROPERTY IMPORTED_LOCATION)
 
         set(qm-output "${CMAKE_BINARY_DIR}/${i}.qm")
 

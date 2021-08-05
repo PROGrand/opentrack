@@ -6,6 +6,6 @@ class wii_metadata_pt : public Metadata
 {
     Q_OBJECT
 
-    QString name() override;
-    QIcon icon() override;
+    QString name() override { return tr("WiiPointTracker 1.1"); };
+    QIcon icon() override { return QIcon(":/Resources/wii.png"); };
 };

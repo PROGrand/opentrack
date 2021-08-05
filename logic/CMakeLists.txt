@@ -5,3 +5,5 @@ if(NOT WIN32)
 else()
     target_link_libraries(${self} opentrack-dinput winmm)
 endif()
+
+target_link_libraries(${self} Qt6::Core5Compat)

@@ -12,23 +12,23 @@
 #include <QFile>
 #include "api/plugin-api.hpp"
 
-udp::udp()
+witmotion::witmotion()
 {
     set_dest_address();
 
     QObject::connect(s.b.get(), &bundle_::changed,
-                     this, &udp::set_dest_address,
+                     this, &witmotion::set_dest_address,
                      Qt::DirectConnection);
 }
 
-void udp::pose(const double *headpose, const double*)
+void witmotion::pose(const double *headpose, const double*)
 {
     QMutexLocker l(&lock);
 
     outSocket.writeDatagram((const char *) headpose, sizeof(double[6]), dest_ip, dest_port);
 }
 
-void udp::set_dest_address()
+void witmotion::set_dest_address()
 {
     QMutexLocker l(&lock);
 
@@ -39,7 +39,7 @@ void udp::set_dest_address()
                            (s.ip4.to<unsigned>() & 0xff) << 0  );
 }
 
-module_status udp::initialize()
+module_status witmotion::initialize()
 {
     if (outSocket.bind(QHostAddress::Any, 0, QUdpSocket::DontShareAddress))
         return status_ok();
@@ -47,4 +47,4 @@ module_status udp::initialize()
         return error(tr("Can't bind socket: %1").arg(outSocket.errorString()));
 }
 
-OPENTRACK_DECLARE_PROTOCOL(udp, FTNControls, udp_sender_dll)
+OPENTRACK_DECLARE_PROTOCOL(witmotion, FTNControls, udp_sender_dll)

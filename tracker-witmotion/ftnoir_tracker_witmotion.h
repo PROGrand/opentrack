@@ -55,7 +55,7 @@ class witmotion_receiver_dll : public Metadata
 {
     Q_OBJECT
 
-    QString name() { return tr("UDP over network"); }
+    QString name() { return tr("WitMotion"); }
     QIcon icon() { return QIcon(":/images/opentrack.png"); }
 };
 

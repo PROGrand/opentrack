@@ -259,7 +259,7 @@ BOOL CALLBACK win32_joy_ctx::enum_state::EnumJoysticksCallback(const DIDEVICEINS
 {
     enum_state& state = *reinterpret_cast<enum_state*>(pContext);
     const QString guid = guid_to_string(pdidInstance->guidInstance);
-    const QString name = QString(pdidInstance->tszInstanceName);
+    const QString name = QString::fromWCharArray(pdidInstance->tszInstanceName);
 
     const bool exists = state.joys.find(guid) != state.joys.end();
 

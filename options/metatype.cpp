@@ -7,7 +7,7 @@ template<typename t>
 void declare_metatype_for_type(const char* str)
 {
     qRegisterMetaType<t>(str);
-    qRegisterMetaTypeStreamOperators<t>();
+    //qRegisterMetaTypeStreamOperators<t>();
 }
 
 } // ns options::detail

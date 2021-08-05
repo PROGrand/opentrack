@@ -17,7 +17,7 @@ struct OTR_OPTIONS_EXPORT ini_ctx
 {
     std::optional<QSettings> qsettings { std::in_place };
     QString pathname;
-    QMutex mtx { QMutex::Recursive };
+    QRecursiveMutex mtx;
 
     unsigned refcount = 0;
     bool modifiedp = false;

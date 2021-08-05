@@ -32,6 +32,7 @@ include(opentrack-policy NO_POLICY_SCOPE)
 project(opentrack)
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
+
 # must be prior to CMakeDetermineCXXCompiler due to rpath
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT OR NOT CMAKE_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "" FORCE)
@@ -61,6 +62,15 @@ endif()
 include(CMakeParseArguments)
 
 include(opentrack-load-user-settings)
+
+message("CMAKE_GENERATOR - ${CMAKE_GENERATOR}")
+message("CMAKE_C_FLAGS - ${CMAKE_C_FLAGS}")
+message("CMAKE_CXX_FLAGS - ${CMAKE_CXX_FLAGS}")
+
+set (CMAKE_PREFIX_PATH "${Qt6_ROOT_DIR}")
+message("CMAKE_PREFIX_PATH - ${Qt6_ROOT_DIR}")
+
+
 include(opentrack-mrproper)
 
 set_property(GLOBAL PROPERTY opentrack-all-modules "")
@@ -105,7 +115,10 @@ function(otr_add_subdirs)
 endfunction()
 
 otr_add_subdirs()
-otr_merge_translations()
+
+if(NOT arg_NO-I18N)
+#    otr_merge_translations()
+endif()
 
 include(opentrack-install)
 otr_install_sources()

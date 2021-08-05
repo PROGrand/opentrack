@@ -21,7 +21,7 @@
 // keybinding_worker and joystick context are badly named
 // add namespaces and rename, including inner joystick device struct
 
-using diptr = IDirectInput8A*;
+using diptr = IDirectInput8*;
 
 class OTR_DINPUT_EXPORT di_t final
 {

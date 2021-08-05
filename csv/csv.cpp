@@ -11,7 +11,11 @@
 
 #include "csv.h"
 #include "compat/library-path.hpp"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QTextDecoder>
+#else
+#include <QtCore5Compat/QTextDecoder>
+#endif
 #include <QFile>
 #include <QString>
 #include <QDebug>

@@ -31,7 +31,7 @@ struct OTR_VIDEO_EXPORT video_widget : QWidget
     void draw_image();
 
 protected:
-    mutable QMutex mtx { QMutex::NonRecursive };
+    mutable QMutex mtx;
     QImage texture;
     std::vector<unsigned char> vec;
     bool fresh() const;

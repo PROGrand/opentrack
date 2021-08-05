@@ -6,19 +6,18 @@
 
 class OTR_COMPAT_EXPORT mutex
 {
-    mutable QMutex inner;
+    mutable QRecursiveMutex inner;
 
 public:
-    using RecursionMode = QMutex::RecursionMode;
-    static constexpr RecursionMode Recursive = RecursionMode::Recursive;
-    static constexpr RecursionMode NonRecursive = RecursionMode::NonRecursive;
+    explicit mutex() {}
 
-    mutex& operator=(const mutex& datum);
-    mutex(const mutex& datum);
-    explicit mutex(RecursionMode m);
-    mutex() : mutex{NonRecursive} {}
+    mutex& operator=(const mutex& rhs) { return *this; }
 
-    QMutex* operator&() const noexcept;
-    explicit operator QMutex*() const noexcept;
-    QMutex* operator->() const noexcept;
+    mutex(const mutex& datum) {}
+
+    QRecursiveMutex* operator&() const noexcept { return &inner; }
+
+    operator QRecursiveMutex*() const noexcept { return &inner; }
+
+    QRecursiveMutex* operator->() const noexcept { return &inner; }
 };

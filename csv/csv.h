@@ -1,10 +1,15 @@
 #pragma once
-#include <QtGlobal>
+#include <QIODevice>
 #include <QObject>
 #include <QStringList>
-#include <QIODevice>
-#include <QTextCodec>
-#include <QRegExp>
+#include <QtGlobal>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QtCore/QTextCodec>
+#else
+#include <QtCore5Compat/QRegExp>
+#include <QtCore5Compat/QTextCodec>
+#endif
+
 #include <QtGlobal>
 
 class CSV
@@ -14,6 +19,7 @@ public:
     bool parseLine(QStringList& ret);
 
     static bool getGameData(int gameID, unsigned char* table, QString& gamename);
+
 private:
     CSV(QIODevice* device);
 

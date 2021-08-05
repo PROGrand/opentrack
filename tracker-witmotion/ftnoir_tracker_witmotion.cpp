@@ -6,7 +6,7 @@
  * notice appear in all copies.
  */
 
-#include "ftnoir_tracker_udp.h"
+#include "ftnoir_tracker_witmotion.h"
 #include "api/plugin-api.hpp"
 
 #include <cmath>
@@ -38,7 +38,7 @@ void witmotion::run()
 
             do
             {
-                const qint64 sz = sock.readDatagram(reinterpret_cast<char*>(last_recv_pose2), sizeof(double[6]));
+                const qint64 sz = sock.readDatagram(reinterpret_cast<char*>(last_recv_pose2), sizeof(double[3]));
                 if (sz > 0)
                     ok = true;
             }
@@ -46,7 +46,7 @@ void witmotion::run()
 
             if (ok)
             {
-                for (unsigned i = 0; i < 6; i++)
+                for (unsigned i = 0; i < 3; i++)
                 {
                     int val = std::fpclassify(last_recv_pose2[i]);
                     if (val == FP_NAN || val == FP_INFINITE)
@@ -59,7 +59,7 @@ void witmotion::run()
 
             if (ok)
             {
-                for (unsigned i = 0; i < 6; i++)
+                for (unsigned i = 0; i < 3; i++)
                     last_recv_pose[i] = last_recv_pose2[i];
             }
         }

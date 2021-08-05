@@ -120,7 +120,7 @@ void hatire_thread::teardown_serial()
         {
             msg.append("\r\n");
             msg.append("SEND '");
-            msg.append(s.CmdStop);
+            msg.append(to_latin1(s.CmdStop));
             msg.append("'\r\n");
         }
         emit serial_debug_info(msg);
@@ -241,13 +241,13 @@ void hatire_thread::serial_info_impl()
     if (com_port.isOpen())
     {
         msg.append("\r\n");
-        msg.append(com_port.portName());
+        msg.append(com_port.portName().toLatin1());
         msg.append("\r\n");
         msg.append("BAUDRATE :");
-        msg.append(QString::number(com_port.baudRate()));
+        msg.append(QString::number(com_port.baudRate()).toLatin1());
         msg.append("\r\n");
         msg.append("DataBits :");
-        msg.append(QString::number(com_port.dataBits()));
+        msg.append(QString::number(com_port.dataBits()).toLatin1());
         msg.append("\r\n");
         msg.append("Parity :");
 

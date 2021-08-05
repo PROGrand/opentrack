@@ -27,11 +27,14 @@ public:
     ~witmotion() override;
     module_status start_tracker(QFrame *) override;
     void data(double *data) override;
+    bool center() override;
 protected:
     void run() override;
 private:
     QUdpSocket sock;
-    double last_recv_pose[6], last_recv_pose2[6];
+    volatile bool first{true};
+    double yaw, pitch, roll;
+    double yaw_center, pitch_center, roll_center;
     QMutex mutex;
     settings s;
 };

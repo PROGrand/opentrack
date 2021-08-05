@@ -107,4 +107,5 @@ void witmotion::data(double *data)
 }
 
 
+
 OPENTRACK_DECLARE_TRACKER(witmotion, dialog_witmotion, witmotion_receiver_dll)

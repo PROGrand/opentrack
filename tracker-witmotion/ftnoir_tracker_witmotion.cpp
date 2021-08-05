@@ -12,10 +12,10 @@
 #include <cmath>
 #include <iterator>
 
-witmotion::witmotion() :
-    last_recv_pose { 0,0,0, 0,0,0 },
-    last_recv_pose2 { 0,0,0, 0,0,0 }
-{}
+witmotion::witmotion()
+    : yaw{ 0 }, pitch{ 0 }, roll{ 0 }, yaw_center{ 0 }, pitch_center{ 0 }, roll_center{ 0 }
+{
+}
 
 witmotion::~witmotion()
 {
@@ -25,46 +25,37 @@ witmotion::~witmotion()
 
 void witmotion::run()
 {
-    QByteArray datagram;
-    datagram.resize(sizeof(last_recv_pose));
+    int32_t recv_pose[3];
 
     while (!isInterruptionRequested())
     {
         if (sock.hasPendingDatagrams())
         {
-            QMutexLocker foo(&mutex);
-
             bool ok = false;
 
             do
             {
-                const qint64 sz = sock.readDatagram(reinterpret_cast<char*>(last_recv_pose2), sizeof(double[3]));
+                const qint64 sz = sock.readDatagram(reinterpret_cast<char*>(recv_pose), sizeof(recv_pose));
                 if (sz > 0)
                     ok = true;
-            }
-            while (sock.hasPendingDatagrams());
+            } while (sock.hasPendingDatagrams());
 
             if (ok)
             {
-                for (unsigned i = 0; i < 3; i++)
-                {
-                    int val = std::fpclassify(last_recv_pose2[i]);
-                    if (val == FP_NAN || val == FP_INFINITE)
-                    {
-                        ok = false;
-                        break;
-                    }
-                }
+                QMutexLocker foo(&mutex);
+                yaw = 180.0 * recv_pose[0] / 32678.0;
+                pitch = 180.0 * recv_pose[1] / 32678.0;
+                roll = 180.0 * recv_pose[2] / 32678.0;
             }
 
-            if (ok)
+            if (first)
             {
-                for (unsigned i = 0; i < 3; i++)
-                    last_recv_pose[i] = last_recv_pose2[i];
+                first = false;
+                center();
             }
         }
 
-        (void) sock.waitForReadyRead(73);
+        (void)sock.waitForReadyRead(20);
     }
 }
 
@@ -79,32 +70,62 @@ module_status witmotion::start_tracker(QFrame*)
     return status_ok();
 }
 
-void witmotion::data(double *data)
+void witmotion::data(double* data)
 {
-    QMutexLocker foo(&mutex);
-    for (int i = 0; i < 6; i++)
-        data[i] = last_recv_pose[i];
+    data[TX] = 0;
+    data[TY] = 0;
+    data[TZ] = 0;
 
-    int values[] = {
-        0,
-        90,
-        -90,
-        180,
-        -180,
-    };
-    int indices[] = {
-        s.add_yaw,
-        s.add_pitch,
-        s.add_roll,
-    };
+    double _yaw, _pitch, _roll;
 
-    for (int i = 0; i < 3; i++)
     {
-        const int k = indices[i];
-        if (k >= 0 && k < std::distance(std::begin(values), std::end(values)))
-            data[Yaw + i] += values[k];
+        QMutexLocker foo(&mutex);
+
+        _yaw = yaw_center - yaw;
+        _pitch = pitch_center - pitch;
+        _roll = roll_center - roll;
     }
+
+    data[Yaw] = _yaw;
+    data[Pitch] = _pitch;
+    data[Roll] = _roll;
+
+    //qDebug() << "1 YAW: " << (int)_yaw << " PITCH: " << (int)_pitch << " ROLL: " << (int)_roll;
+
+    //    int values[] = {
+    //        0, 90, -90, 180, -180,
+    //    };
+    //    int indices[] = {
+    //        s.add_yaw,
+    //        s.add_pitch,
+    //        s.add_roll,
+    //    };
+    //
+    //    for (int i = 0; i < 3; i++)
+    //    {
+    //        const int k = indices[i];
+    //        if (k >= 0 && k < std::distance(std::begin(values), std::end(values)))
+    //            data[Yaw + i] += values[k];
+    //    }
 }
 
+bool witmotion::center()
+{
+    QMutexLocker foo(&mutex);
+
+    if (first)
+    {
+//        qDebug() << "WIT CENTER FALSE";
+        return false;
+    }
+
+    yaw_center = yaw;
+    pitch_center = pitch;
+    roll_center = roll;
+
+//    qDebug() << "WIT CENTER";
+
+    return true;
+}
 
 OPENTRACK_DECLARE_TRACKER(witmotion, dialog_witmotion, witmotion_receiver_dll)
